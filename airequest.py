@@ -18,7 +18,7 @@ def prompt(prompt: str) -> str:
         messages=[
             {"role": "system", "content": admin_info},
             {"role": "user", "content": prompt}],
-        temperature=0.5,
+        temperature=0.4,
     )
     if not response.choices[0].message.content:
         return "error: no answer"
