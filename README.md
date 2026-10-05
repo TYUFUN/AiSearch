@@ -2,12 +2,15 @@
 
 A lightweight, fast Python CLI tool that uses the Gemini API (via the OpenAI-compatible SDK) to convert your natural language queries into URLs and automatically opens them in your default web browser.
 
+Works on **Linux** and **Windows**.
+
 ## ✨ Features
 
 * **Instant Link Generation**: Pass any prompt, and the AI returns a direct URL that opens automatically in a new browser tab.
-* **XDG-Compliant Configuration**: Securely stores and reads your API token from `~/.config/ai/.env`.
-* **Standalone Binary**: Packaged into a single portable binary using PyInstaller.
-* **Automated Setup**: Included `setup.sh` handles directory creation, token prompting, and binary installation to `/usr/local/bin`.
+* **Cross-platform**: Runs on Linux and Windows.
+* **Simple Configuration**: Your API token is stored in `~/.config/ai/.env` on Linux and in `%APPDATA%\ai\.env` on Windows (usually `C:\Users\<you>\AppData\Roaming\ai\.env`).
+* **Standalone Binary**: Packaged into a single portable executable using PyInstaller.
+* **Automated Setup**: `setup.sh` (Linux) and `setup.ps1` (Windows) handle directory creation, token prompting, and installation.
 
 ## 🔑 Getting a Gemini API Key
 
@@ -24,14 +27,32 @@ This tool requires a free Google Gemini API key:
 
 ### Quick Install (Pre-compiled Binary)
 
-1. Download the latest release `ai` binary and `setup.sh` from the [Releases](https://github.com/tyufun/aisearch/releases) page.
-2. put the files in one directory.
-3. Make `setup.sh` executable and run it:
-   ```bash
-   chmod +x setup.sh
-   ./setup.sh
-   ```
-4. Enter your Gemini API token when prompted.
+Download the latest binary and the setup script for your system from the [Releases](https://github.com/tyufun/aisearch/releases) page, and put both files in one directory.
+
+#### 🐧 Linux
+
+Files: `ai` + `setup.sh`
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+The script installs the binary to `/usr/local/bin` (requires `sudo`).
+
+#### 🪟 Windows
+
+Files: `ai.exe` + `setup.ps1`
+
+Open PowerShell in that directory and run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+The script installs `ai.exe` to `%LOCALAPPDATA%\Programs\ai` and adds that folder to your user `PATH` (no administrator rights needed). **Open a new terminal window afterwards** so the updated `PATH` is picked up.
+
+In both cases, enter your Gemini API token when prompted.
 
 ---
 
@@ -51,23 +72,65 @@ ai python typer documentation
 
 ## 🛠️ Building from Source
 
-If you want to modify the code and build the binary yourself using [`uv`](https://github.com/astral-sh/uv):
+Requirements: Python 3.11+ and [`uv`](https://github.com/astral-sh/uv).
 
-1. Clone this repository and install dependencies:
-   ```bash
-   git clone https://github.com/tyufun/aisearch.git
-   cd aisearch
-   uv sync
-   ```
+> **Note:** PyInstaller cannot cross-compile. Build the Linux binary on Linux and the Windows `.exe` on Windows.
 
-2. Build the single-file executable with PyInstaller:
-   ```bash
-   uv run pyinstaller -F -n ai --clean -y main.py
-   ```
+Installing `uv`:
 
-3. Move the built binary alongside `setup.sh` and run the installer:
-   ```bash
-   cp dist/ai .
-   chmod +x setup.sh
-   ./setup.sh
-   ```
+```bash
+# Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+```powershell
+# Windows (PowerShell)
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+### 🐧 Linux
+
+```bash
+git clone https://github.com/tyufun/aisearch.git
+cd aisearch
+uv sync
+uv run pyinstaller -F -n ai --clean -y main.py
+cp dist/ai .
+chmod +x setup.sh
+./setup.sh
+```
+
+### 🪟 Windows
+
+```powershell
+git clone https://github.com/tyufun/aisearch.git
+cd aisearch
+uv sync
+uv run pyinstaller -F -n ai --clean -y main.py
+copy dist\ai.exe .
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
+
+---
+
+## 🧪 Running Without Building
+
+You don't have to build a binary. After `uv sync`, run the script directly from the project directory (same command on Linux and Windows):
+
+```bash
+uv run main.py github user tyufun
+```
+
+You still need the token file. Create `~/.config/ai/.env` (Windows: `%APPDATA%\ai\.env`) with this content:
+
+```
+TOKEN=your_token
+```
+
+---
+
+## ❓ Troubleshooting
+
+* **`ai` is not recognized (Windows)**: open a *new* terminal after running `setup.ps1`, or check that `%LOCALAPPDATA%\Programs\ai` is in your `PATH`.
+* **PowerShell blocks the script**: use the `-ExecutionPolicy Bypass` command shown above, or run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once.
+* **`you need to create .env file with TOKEN variable`**: the config file is missing. Re-run the setup script or create the file manually as shown above.

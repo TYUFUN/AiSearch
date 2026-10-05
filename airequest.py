@@ -1,8 +1,15 @@
 import os
+import sys
 import dotenv
 from openai import OpenAI
 from pathlib import Path
-ENV_PATH = Path.home() / ".config" / "ai" / ".env"
+def get_config_dir() -> Path:
+    # Windows: %APPDATA%\ai   |   Linux: ~/.config/ai
+    if sys.platform == "win32":
+        base = os.getenv("APPDATA")
+        return (Path(base) if base else Path.home() / "AppData" / "Roaming") / "ai"
+    return Path.home() / ".config" / "ai"
+ENV_PATH = get_config_dir() / ".env"
 dotenv.load_dotenv(ENV_PATH)
 client = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
