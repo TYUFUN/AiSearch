@@ -40,7 +40,11 @@ fi
 SHOULD_DOWNLOAD=true
 if [ -f "$TARGET_BINARY" ]; then
     echo "Binary '$BINARY_NAME' is already installed at $TARGET_BINARY."
-    read -rp "Do you want to download and update to the latest version? (y/N): " UPDATE_CHOICE
+    
+    # Ask if user wants to update, defaulting to 'y' on Enter
+    read -rp "Do you want to download and update to the latest version? [Y/n]: " UPDATE_CHOICE
+    UPDATE_CHOICE="${UPDATE_CHOICE:-y}"
+
     if [[ ! "$UPDATE_CHOICE" =~ ^[Yy]$ ]]; then
         echo "Skipping update."
         SHOULD_DOWNLOAD=false
