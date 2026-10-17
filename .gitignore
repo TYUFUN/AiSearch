@@ -4,3 +4,4 @@ __pycache__
 build
 dist
 ai.spec
+main.spec
