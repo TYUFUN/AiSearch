@@ -1,3 +1,4 @@
+import subprocess
 import webbrowser
 import typer
 from sys import exit
@@ -24,7 +25,11 @@ args: List[str] | None  = typer.Argument(None)):
                 f.write(text)
         except FileExistsError:
             pass
-        typer.launch(str(cfg_path))
+        if check_system() == "Windows":
+            # .cfg has no default app on Windows, so open it in Notepad directly
+            subprocess.Popen(["notepad.exe", str(cfg_path)])
+        else:
+            typer.launch(str(cfg_path))
         return
     final_string: str = " ".join(args) 
     ai_answer: str = prompt(final_string)

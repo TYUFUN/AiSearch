@@ -159,5 +159,4 @@ Build each binary on its own system (see above), then attach both files to a new
 * **`Failed to download binary from GitHub Releases`**: the latest release has no asset with the exact name `ai` / `ai.exe`, or you are offline.
 * **`Could not write ...\ai.exe` during an update (Windows)**: the old `ai.exe` is still running. Close it and run the script again.
 * **Windows SmartScreen / antivirus flags `ai.exe`**: unsigned PyInstaller executables are sometimes reported as suspicious. Choose *More info → Run anyway*, or build it yourself from source.
-* **`ai config` asks which app to open the file with (Windows)**: `.cfg` has no default program. Pick a text editor (e.g. Notepad) once and tick *Always use this app*.
 * **`you need to create .env file with TOKEN variable`**: the config file is missing. Re-run the setup script or create the file manually as shown above.
