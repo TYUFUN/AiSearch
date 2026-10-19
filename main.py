@@ -5,7 +5,7 @@ from sys import exit
 from typing import List
 from airequest import prompt, ENV_PATH, check_system, cfg_path
 import os
-
+version = "1.1.1"
 if not os.path.exists(ENV_PATH):
     print("you need to create .env file with TOKEN variable like this: TOKEN=your_token")
     exit(1)
@@ -30,6 +30,9 @@ args: List[str] | None  = typer.Argument(None)):
             subprocess.Popen(["notepad.exe", str(cfg_path)])
         else:
             typer.launch(str(cfg_path))
+        return
+    elif args[0] == "version" and len(args) == 1:
+        print(version)
         return
     final_string: str = " ".join(args) 
     ai_answer: str = prompt(final_string)

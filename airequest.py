@@ -27,17 +27,20 @@ def check_config_file() -> str:
         return ""
     return config
 ENV_PATH = get_config_dir() / ".env"
-dotenv.load_dotenv(ENV_PATH)
-client = OpenAI(
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-    api_key=os.getenv("TOKEN")
-)
+
 
 admin_info = """
 you a CLI helper for looking for links
 your task is to answer only the link https based on what user said
 most important rule is answer only the link without any other text"""
 def prompt(prompt: str) -> str:
+    dotenv.load_dotenv(ENV_PATH)
+    client = OpenAI(
+        base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+        api_key=dotenv.dotenv_values(ENV_PATH).get("TOKEN")
+    )
+    
+    
     response = client.chat.completions.create(
         model="models/gemini-3.6-flash",
         messages=[
