@@ -19,7 +19,7 @@ args: List[str] | None  = typer.Argument(None)):
     if not args:
         print("you didnt provide any text")
         return
-    if args[0] == "config":
+    if args[0] == "config" and len(args) == 1:
         try:
             with open(cfg_path, "x", encoding="utf-8") as f:
                 f.write(text)
