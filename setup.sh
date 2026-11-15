@@ -56,8 +56,8 @@ if [ "$SHOULD_DOWNLOAD" = true ]; then
     echo "Downloading latest $BINARY_NAME from GitHub Releases..."
     TEMP_FILE="/tmp/$BINARY_NAME"
     
-    # Download via curl (-L for redirects, -s for silent mode, --fail to exit on 404)
-    if ! curl -sL --fail "$DOWNLOAD_URL" -o "$TEMP_FILE"; then
+    # Download via curl with progress bar (-L for redirects, --progress-bar for visual progress, --fail to exit on 404)
+    if ! curl --progress-bar -L --fail "$DOWNLOAD_URL" -o "$TEMP_FILE"; then
         echo "Error: Failed to download binary from GitHub Releases."
         echo "Make sure you have created a Release and attached a file named '$BINARY_NAME'."
         exit 1
