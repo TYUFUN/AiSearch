@@ -17,14 +17,17 @@ def prompt(prompt: str) -> str:
     )
     
     
-    response = client.chat.completions.create(
-        model="models/gemini-3.6-flash",
-        messages=[
-            {"role": "system", "content": admin_info + "user config: " + check_config_file()},
-            {"role": "user", "content": prompt}],
-        temperature=0.4,
-        max_tokens=1000
-    )
-    if not response.choices[0].message.content:
-        return "error: no answer"
-    return response.choices[0].message.content
+    try:
+        response = client.chat.completions.create(
+            model="models/gemini-3.6-flash",
+            messages=[
+                {"role": "system", "content": admin_info + "user config: " + check_config_file()},
+                {"role": "user", "content": prompt}],
+            temperature=0.4,
+            max_tokens=1000
+        )
+        if not response.choices[0].message.content:
+            return "error: no answer"
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"error: {e}"

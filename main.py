@@ -5,8 +5,10 @@ from sys import exit
 from typing import List
 from additional import ENV_PATH, check_system, cfg_path
 from airequest import prompt
+from rich.console import Console
 import os
-version = "1.2"
+version = "1.2.1"
+console = Console(stderr=True)
 if not os.path.exists(ENV_PATH):
     print("you need to create .env file with TOKEN variable like this: TOKEN=your_token")
     exit(1)
@@ -42,7 +44,8 @@ def run(
         return
 
     final_string: str = " ".join(args) 
-    ai_answer: str = prompt(final_string)
+    with console.status("[bold cyan]Searching with AI...", spinner="dots"):
+        ai_answer: str = prompt(final_string)
     if ai_answer.startswith("error"):
         print("ai didnt answer")
         return
